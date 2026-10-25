@@ -231,18 +231,45 @@
     let stockData = [];
     let soldData = [];
 
-    function handleLogin(e) {
-      e.preventDefault();
-      const u = document.getElementById('login-user').value;
-      const p = document.getElementById('login-pass').value;
-      
-      if(u && p) {
-        currentUser = { user: u, role: u === 'admin' ? 'Admin' : 'Karyawan' };
-        document.getElementById('page-login').classList.add('hidden');
-        document.getElementById('main-header').classList.remove('hidden');
-        switchPage('dashboard');
-      }
+// Ganti URL di bawah dengan URL Web App dari Apps Script lo
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwm1d0s5eSNcqdzF8q9NEtusEiJwWGeCEz_7Y18N2cqgIf0kvt895JdcQQX7SBfqXsH9w/exec';
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  
+  const btn = e.target.querySelector('button');
+  btn.innerText = 'Mengecek Data...';
+  btn.disabled = true;
+
+  try {
+    // Ambil data users dari Google Sheets
+    const res = await fetch(SCRIPT_URL + '?action=getUsers');
+    const users = await res.json();
+    
+    // Cari user yang sesuai
+    const match = users.find(user => 
+      (user.id == u || user.username == u) && user.password == p
+    );
+    
+    if (match) {
+      currentUser = match;
+      alert(`Selamat datang, ${match.username || match.id}! (${match.role})`);
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('main-header').classList.remove('hidden');
+      switchPage('dashboard');
+    } else {
+      alert('Username / ID atau Password salah!');
     }
+  } catch (err) {
+    alert('Gagal terhubung ke Database Google Sheets!');
+    console.error(err);
+  } finally {
+    btn.innerText = 'Masuk Sistem';
+    btn.disabled = false;
+  }
+}
 
     function logout() {
       currentUser = null;
