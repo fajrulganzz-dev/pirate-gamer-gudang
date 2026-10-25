@@ -2,431 +2,124 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pirate Gamer Stock</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f6f9; color: #333; }
-
-    /* Header & Navigation Upper Bar */
-    header { background: #1a252f; color: white; padding: 15px 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
-    header h1 { font-size: 20px; font-weight: bold; }
-    nav { display: flex; gap: 10px; margin-top: 10px; }
-    nav button { background: #2c3e50; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.3s; }
-    nav button.active, nav button:hover { background: #e74c3c; font-weight: bold; }
-
-    .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
-
-    /* Login Page */
-    .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-    .card-login { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-    .card-login h2 { margin-bottom: 20px; text-align: center; color: #1a252f; }
-
-    /* Forms & Inputs */
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-    .full-width { grid-column: 1 / -1; }
-
-    .btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; }
-    .btn:hover { background: #219150; }
-    .btn-danger { background: #e74c3c; }
-    .btn-danger:hover { background: #c0392b; }
-    .btn-warning { background: #f39c12; color: white; }
-
-    /* Dashboard Summary Cards */
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 25px; }
-    .metric-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
-    .metric-card.green { border-left-color: #2ecc71; }
-    .metric-card.orange { border-left-color: #e67e22; }
-    .metric-card h3 { font-size: 14px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 8px; }
-    .metric-card p { font-size: 24px; font-weight: bold; color: #2c3e50; }
-
-    /* Tables */
-    .table-container { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow-x: auto; padding: 15px; margin-top: 20px; }
-    table { width: 100%; border-collapse: collapse; min-width: 600px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; }
-    th { background: #f8f9fa; color: #2c3e50; }
-
-    @media (max-width: 768px) {
-      header { flex-direction: column; align-items: flex-start; }
-      nav { width: 100%; display: flex; justify-content: space-between; overflow-x: auto; }
-      nav button { padding: 8px 12px; font-size: 12px; flex: 1; text-align: center; }
-      .form-grid { grid-template-columns: 1fr; }
-    }
-
-    .hidden { display: none !important; }
-    .optional-text { font-size: 11px; color: #888; font-weight: normal; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-white min-h-screen">
 
-  <!-- Top Navigation Header -->
-  <header id="main-header" class="hidden">
-    <h1>Pirate Gamer Stock</h1>
-    <nav>
-      <button id="nav-dashboard" class="active" onclick="switchPage('dashboard')">Dashboard</button>
-      <button id="nav-stock" onclick="switchPage('stock')">Stock Akun</button>
-      <button id="nav-riwayat" onclick="switchPage('riwayat')">Riwayat Akun Terjual</button>
-      <button onclick="logout()" style="background:#7f8c8d;">Logout</button>
-    </nav>
+  <header id="in-header" class="bg-slate-800 p-4 border-b border-slate-700 hidden flex justify-between items-center">
+    <h1 class="font-bold text-xl text-amber-400">🏴‍☠️ Pirate Gamer Stock</h1>
+    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm">Logout</button>
   </header>
 
-  <div class="container">
+  <main class="p-4 max-w-4xl mx-auto">
+    <!-- PAGE LOGIN -->
+    <section id="page-login" class="bg-slate-800 p-6 rounded-xl border border-slate-700 max-w-md mx-auto mt-10">
+      <h2 class="text-2xl font-bold mb-6 text-center text-amber-400">Login Admin</h2>
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1">Username / ID</label>
+          <input type="text" id="login-user" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Password</label>
+          <input type="password" id="login-pass" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white">
+        </div>
+        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 font-bold py-2 rounded text-slate-900">Masuk Sistem</button>
+      </form>
+    </section>
 
-    <!-- 1. Halaman Login -->
-    <div id="page-login" class="login-wrapper">
-      <div class="card-login">
-        <h2>Login Admin JB</h2>
-        <form onsubmit="handleLogin(event)">
-          <div class="form-group">
-            <label>Username / ID Admin</label>
-            <input type="text" id="login-user" placeholder="Masukkan Username/ID" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="login-pass" placeholder="Masukkan Password" required>
-          </div>
-          <button type="submit" class="btn" style="margin-top:10px;">Masuk Sistem</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 2. Halaman Dashboard -->
-    <div id="page-dashboard" class="hidden">
-      <h2 style="margin-bottom: 15px;">Dashboard Ringkasan JB</h2>
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <h3>Total Penjualan Kotor</h3>
-          <p id="total-kotor">Rp 0</p>
-        </div>
-        <div class="metric-card green">
-          <h3>Keuntungan Bersih (Profit)</h3>
-          <p id="total-bersih">Rp 0</p>
-        </div>
-        <div class="metric-card orange">
-          <h3>Stock Akun Ready</h3>
-          <p id="total-tersedia">0 Akun</p>
-        </div>
+    <!-- PAGE DASHBOARD -->
+    <section id="page-dashboard" class="hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold">Daftar Stok Gudang</h2>
+        <button onclick="loadStocks()" class="bg-amber-500 text-slate-900 font-bold px-3 py-1 rounded text-sm">🔄 Refresh Data</button>
       </div>
 
-      <div class="table-container">
-        <h3>Ringkasan Stock Akun Available</h3>
-        <table id="table-dash-belum">
-          <thead>
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="border-b border-slate-700 text-amber-400">
             <tr>
-              <th>ID</th>
-              <th>Nama Akun</th>
-              <th>Harga Jual</th>
-              <th>Status</th>
+              <th class="p-2">Data / Nama Stok</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Data dinamik -->
+          <tbody id="stock-list">
+            <tr><td class="p-2 text-slate-400">Tekan Refresh untuk memuat data...</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <!-- 3. Halaman Management Stock -->
-    <div id="page-stock" class="hidden">
-      <h2>Kelola Stock Akun</h2>
-
-      <!-- Form Tambah Stock -->
-      <div class="table-container">
-        <h3>Tambah Stock Baru</h3>
-        <form onsubmit="addStock(event)">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Nama Akun / Spesifikasi Game *</label>
-              <input type="text" id="stock-name" placeholder="Contoh: Akun ML Mythic / Blox Fruit" required>
-            </div>
-            <div class="form-group">
-              <label>Harga Modal (Rp) *</label>
-              <input type="number" id="stock-modal" placeholder="0" required>
-            </div>
-            <div class="form-group">
-              <label>Harga Jual (Rp) *</label>
-              <input type="number" id="stock-jual" placeholder="0" required>
-            </div>
-            <div class="form-group">
-              <label>Email Google (Gmail) *</label>
-              <input type="email" id="stock-email" placeholder="email@gmail.com" required>
-            </div>
-            <div class="form-group">
-              <label>Password Gmail *</label>
-              <input type="text" id="stock-pw" placeholder="Pass Gmail" required>
-            </div>
-
-            <!-- DUA KOLOM OPSIONAL UNTUK GAME -->
-            <div class="form-group">
-              <label>Login Game <span class="optional-text">(Opsional: Username/ID Roblox/Moonton)</span></label>
-              <input type="text" id="stock-login-game" placeholder="Boleh kosong">
-            </div>
-            <div class="form-group">
-              <label>Password Game <span class="optional-text">(Opsional: Password Game)</span></label>
-              <input type="text" id="stock-pw-game" placeholder="Boleh kosong">
-            </div>
-
-            <div class="form-group full-width">
-              <label>Catatan Tambahan / Notes <span class="optional-text">(Opsional)</span></label>
-              <textarea id="stock-notes" rows="2" placeholder="Catatan spesifikasi / level / fruit"></textarea>
-            </div>
-
-            <div class="full-width" style="margin-top: 5px;">
-              <button type="submit" id="btn-save-stock" class="btn">Simpan Stock Baru ke Google Sheets</button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <!-- Tabel Stock -->
-      <div class="table-container">
-        <h3>Daftar Stock Akun Available</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama Akun</th>
-              <th>Modal / Jual</th>
-              <th>Google (Email/PW)</th>
-              <th>In-Game (User/PW)</th>
-              <th>Notes</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-stock">
-            <!-- Data dinamik -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 4. Halaman Riwayat Akun Terjual -->
-    <div id="page-riwayat" class="hidden">
-      <h2>Riwayat Akun Terjual</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>ID Transaksi</th>
-              <th>Nama Akun</th>
-              <th>Harga Modal</th>
-              <th>Harga Jual</th>
-              <th>Hasil Bersih</th>
-              <th>Tanggal Terjual</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-riwayat">
-            <!-- Data dinamik -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
+    </section>
+  </main>
 
   <script>
-    let currentUser = null;
-    let stockData = [];
-    let soldData = [];
-
-    // SCRIPT URL Google Apps Script milikmu
+    // PASANG URL WEB APP LU DI SINI:
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwm1d0s5eSNcqdzF8q9NEtusEiJwWGeCEz_7Y18N2cqgIf0kvt895JdcQQX7SBfqXsH9w/exec';
-																	  
-async function handleLogin(e) {
-  e.preventDefault();
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value.trim();
-  
-  const btn = e.target.querySelector('button');
-  btn.innerText = 'Mengecek Data...';
-  btn.disabled = true;
-  
-  try {
-    // Tarik data users dari Google Sheets pakai action=getUsers yang udah ada
-    const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
-    const users = await res.json();
-    
-    // Cari user yang username & password-nya cocok
-    // (Menyesuaikan kolom: username ada di index ke-1, password di index ke-2)
-    const validUser = users.find(user => 
-      (user.username == u || user.id == u) && user.password == p
-    );
-    
-    if (validUser) {
-      currentUser = validUser.username;
-      alert('Selamat datang, ' + currentUser + '!');
-      document.getElementById('page-login').classList.add('hidden');
-      document.getElementById('in-header').classList.remove('hidden');
-      switchPage('dashboard');
-    } else {
-      alert('Username atau Password salah!');
-    }
-  } catch (err) {
-    alert('Gagal terhubung ke Database Google Sheets!');
-    console.error(err);
-  } finally {
-    btn.innerText = 'Masuk Sistem';
-    btn.disabled = false;
-  }
-}
 
-    function logout() {
-      currentUser = null;
-      document.getElementById('main-header').classList.add('hidden');
-      document.getElementById('page-dashboard').classList.add('hidden');
-      document.getElementById('page-stock').classList.add('hidden');
-      document.getElementById('page-riwayat').classList.add('hidden');
-      document.getElementById('page-login').classList.remove('hidden');
-    }
+    let currentUser = null;
 
-    function switchPage(page) {
-      ['dashboard', 'stock', 'riwayat'].forEach(p => {
-        document.getElementById(`page-${p}`).classList.add('hidden');
-        document.getElementById(`nav-${p}`).classList.remove('active');
-      });
-      document.getElementById(`page-${page}`).classList.remove('hidden');
-      document.getElementById(`nav-${page}`).classList.add('active');
-      renderData();
-    }
-
-    async function addStock(e) {
+    async function handleLogin(e) {
       e.preventDefault();
-      const btn = document.getElementById('btn-save-stock');
-      btn.innerText = 'Menyimpan ke Spreadsheet...';
+      const u = document.getElementById('login-user').value.trim();
+      const p = document.getElementById('login-pass').value.trim();
+      const btn = e.target.querySelector('button');
+      btn.innerText = 'Mengecek Data...';
       btn.disabled = true;
 
-      const newItem = {
-        id: 'ACC-' + Date.now().toString().slice(-4),
-        name: document.getElementById('stock-name').value,
-        modal: parseInt(document.getElementById('stock-modal').value) || 0,
-        jual: parseInt(document.getElementById('stock-jual').value) || 0,
-        email: document.getElementById('stock-email').value,
-        pw: document.getElementById('stock-pw').value,
-        loginGame: document.getElementById('stock-login-game').value || "",
-        pwGame: document.getElementById('stock-pw-game').value || "",
-        notes: document.getElementById('stock-notes').value || "",
-        status: 'Tersedia'
-      };
-
       try {
-        // Kirim data langsung ke Google Sheets (POST)
-        const payload = {
-          action: "createStock",
-          name: newItem.name,
-          modal: newItem.modal,
-          jual: newItem.jual,
-          gmail: newItem.email,
-          password: newItem.pw,
-          loginGame: newItem.loginGame,
-          pwGame: newItem.pwGame
-        };
+        const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
+        const users = await res.json();
 
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
+        // Cek pencocokan ID/Username dan Password
+        const validUser = users.find(user => 
+          (String(user.username) === u || String(user.id) === u) && String(user.password) === p
+        );
 
-        const result = await res.json();
-        
-        if(result.status === 'success') {
-          stockData.push(newItem);
-          e.target.reset();
-          alert('Stock akun berhasil disimpan ke Google Sheets!');
-          renderData();
+        if (validUser) {
+          currentUser = validUser.username;
+          alert('Selamat datang, ' + currentUser + '!');
+          document.getElementById('page-login').classList.add('hidden');
+          document.getElementById('in-header').classList.remove('hidden');
+          document.getElementById('page-dashboard').classList.remove('hidden');
+          loadStocks();
         } else {
-          alert('Gagal menyimpan ke Sheets: ' + result.message);
+          alert('Username atau Password salah!');
         }
-      } catch(err) {
+      } catch (err) {
+        alert('Gagal terhubung ke Google Sheets!');
         console.error(err);
-        alert('Terjadi kesalahan koneksi ke server!');
       } finally {
-        btn.innerText = 'Simpan Stock Baru ke Google Sheets';
+        btn.innerText = 'Masuk Sistem';
         btn.disabled = false;
       }
     }
 
-    function markAsSold(id) {
-      const idx = stockData.findIndex(item => item.id === id);
-      if(idx !== -1) {
-        const item = stockData[idx];
-        const soldItem = {
-          txId: 'TRX-' + Date.now().toString().slice(-4),
-          name: item.name,
-          modal: item.modal,
-          jual: item.jual,
-          profit: item.jual - item.modal,
-          date: new Date().toLocaleDateString('id-ID')
-        };
-        soldData.push(soldItem);
-        stockData.splice(idx, 1);
-        renderData();
+    async function loadStocks() {
+      const container = document.getElementById('stock-list');
+      container.innerHTML = '<tr><td class="p-2 text-amber-400">Memuat stok dari Spreadsheet...</td></tr>';
+      
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getStocks`);
+        const data = await res.json();
+        
+        if (!data || data.length <= 1) {
+          container.innerHTML = '<tr><td class="p-2 text-slate-400">Belum ada data stok.</td></tr>';
+          return;
+        }
+
+        let html = '';
+        for (let i = 1; i < data.length; i++) {
+          html += `<tr class="border-b border-slate-700/50"><td class="p-2">${data[i].join(' | ')}</td></tr>`;
+        }
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = '<tr><td class="p-2 text-red-400">Gagal mengambil data stok!</td></tr>';
+        console.error(err);
       }
     }
 
-    function deleteStock(id) {
-      if(confirm('Hapus barang ini dari stock?')) {
-        stockData = stockData.filter(item => item.id !== id);
-        renderData();
-      }
-    }
-
-    function renderData() {
-      const totalKotor = soldData.reduce((sum, i) => sum + i.jual, 0);
-      const totalBersih = soldData.reduce((sum, i) => sum + i.profit, 0);
-      document.getElementById('total-kotor').innerText = 'Rp ' + totalKotor.toLocaleString('id-ID');
-      document.getElementById('total-bersih').innerText = 'Rp ' + totalBersih.toLocaleString('id-ID');
-      document.getElementById('total-tersedia').innerText = stockData.length + ' Akun';
-
-      const dashTbody = document.querySelector('#table-dash-belum tbody');
-      dashTbody.innerHTML = stockData.map(i => `
-        <tr>
-          <td>${i.id}</td>
-          <td>${i.name}</td>
-          <td>Rp ${i.jual.toLocaleString('id-ID')}</td>
-          <td><span style="background:#e8f8f5; color:#27ae60; padding:4px 8px; border-radius:4px;">${i.status}</span></td>
-        </tr>
-      `).join('');
-
-      const stockTbody = document.getElementById('tbody-stock');
-      stockTbody.innerHTML = stockData.map(i => `
-        <tr>
-          <td>${i.id}</td>
-          <td><strong>${i.name}</strong></td>
-          <td>M: Rp ${i.modal.toLocaleString('id-ID')}<br><small style="color:#27ae60">J: Rp ${i.jual.toLocaleString('id-ID')}</small></td>
-          <td>${i.email}<br><small style="color:#7f8c8d">PW: ${i.pw}</small></td>
-          <td>${i.loginGame ? i.loginGame : '-'}<br><small style="color:#7f8c8d">${i.pwGame ? 'PW: ' + i.pwGame : ''}</small></td>
-          <td>${i.notes}</td>
-          <td>
-            <button onclick="markAsSold('${i.id}')" class="btn" style="padding:5px 10px; font-size:12px; margin-bottom:4px;">Tandai Terjual</button>
-            <button onclick="deleteStock('${i.id}')" class="btn btn-danger" style="padding:5px 10px; font-size:12px;">Hapus</button>
-          </td>
-        </tr>
-      `).join('');
-
-      const riwayatTbody = document.getElementById('tbody-riwayat');
-      riwayatTbody.innerHTML = soldData.map(i => `
-        <tr>
-          <td>${i.txId}</td>
-          <td>${i.name}</td>
-          <td>Rp ${i.modal.toLocaleString('id-ID')}</td>
-          <td>Rp ${i.jual.toLocaleString('id-ID')}</td>
-          <td style="color:#27ae60; font-weight:bold;">Rp ${i.profit.toLocaleString('id-ID')}</td>
-          <td>${i.date}</td>
-          <td><button class="btn btn-warning" style="padding:5px 10px; font-size:12px;" onclick="alert('Item riwayat tersimpan')">Detail</button></td>
-        </tr>
-      `).join('');
-    }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker Berhasil!'))
-        .catch((err) => console.log('Gagal:', err));
+    function logout() {
+      location.reload();
     }
   </script>
 </body>
