@@ -1,16 +1,11 @@
 {
-  "name": "Pirate gamer gudang",
-  "short_name": "PG GUDANG",
-  "start_url": "index.html",
+  "name": "Pirate Gamer Stock",
+  "short_name": "PirateGamer",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
-    {
-      "src": "icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
     {
       "src": "icon.png",
       "sizes": "512x512",
