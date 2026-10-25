@@ -238,36 +238,43 @@
     // SCRIPT URL Google Apps Script milikmu
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwm1d0s5eSNcqdzF8q9NEtusEiJwWGeCEz_7Y18N2cqgIf0kvt895JdcQQX7SBfqXsH9w/exec';
 																	  
-    async function handleLogin(e) {
-      e.preventDefault();
-      const u = document.getElementById('login-user').value.trim();
-      const p = document.getElementById('login-pass').value.trim();
-
-      const btn = e.target.querySelector('button');
-      btn.innerText = 'Mengecek Data...';
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`);
-        const data = await res.json();
-
-        if (data.status === 'success') {
-          currentUser = u;
-          alert(`Selamat datang, ${u}!`);
-          document.getElementById('page-login').classList.add('hidden');
-          document.getElementById('main-header').classList.remove('hidden');
-          switchPage('dashboard');
-        } else {
-          alert(data.message || 'Username atau Password salah!');
-        }
-      } catch (err) {
-        alert('Gagal terhubung ke Database Google Sheets!');
-        console.error(err);
-      } finally {
-        btn.innerText = 'Masuk Sistem';
-        btn.disabled = false;
-      }
+async function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  
+  const btn = e.target.querySelector('button');
+  btn.innerText = 'Mengecek Data...';
+  btn.disabled = true;
+  
+  try {
+    // Tarik data users dari Google Sheets pakai action=getUsers yang udah ada
+    const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
+    const users = await res.json();
+    
+    // Cari user yang username & password-nya cocok
+    // (Menyesuaikan kolom: username ada di index ke-1, password di index ke-2)
+    const validUser = users.find(user => 
+      (user.username == u || user.id == u) && user.password == p
+    );
+    
+    if (validUser) {
+      currentUser = validUser.username;
+      alert('Selamat datang, ' + currentUser + '!');
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('in-header').classList.remove('hidden');
+      switchPage('dashboard');
+    } else {
+      alert('Username atau Password salah!');
     }
+  } catch (err) {
+    alert('Gagal terhubung ke Database Google Sheets!');
+    console.error(err);
+  } finally {
+    btn.innerText = 'Masuk Sistem';
+    btn.disabled = false;
+  }
+}
 
     function logout() {
       currentUser = null;
